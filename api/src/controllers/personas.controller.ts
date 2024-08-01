@@ -166,9 +166,9 @@ export const deletePersona = async (req: Request, res: Response) => {
   try {
     const { dni } = req.params;
 
-    // if (dni.length > 8 || dni.length < 7){
-    //   return res.status(400).send('Invalid dni');
-    // }
+    if (dni.length > 8 || dni.length < 7){
+      return res.status(400).send('Invalid dni');
+    }
 
     const dniNumber = Number(dni);
     if (isNaN(dniNumber)) {

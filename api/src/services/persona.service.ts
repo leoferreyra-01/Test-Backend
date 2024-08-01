@@ -1,8 +1,11 @@
+import { Direccion } from './../models/direccion';
 import { pool } from '../config/db';
-import { Persona, PersonaInfo } from '../models/persona';
+import { Persona, PersonaConDirecciones, PersonaInfo } from '../models/persona';
 import { ResultSetHeader, RowDataPacket } from 'mysql2';
+import { findAllDireccionesByDni } from './direccion.service';
 
-export const findAllPersonas = (search: PersonaInfo): Promise<Persona[] | []> => {
+//TODO Implementar integracion de la tabala de direccion
+export const findAllPersonas = (search: PersonaInfo): Promise<PersonaConDirecciones[] | []> => {
 
   var where = '';
   if (search.dni) where += `${where.length?' AND':''} dni LIKE '%${search.dni}%'`;
@@ -11,27 +14,40 @@ export const findAllPersonas = (search: PersonaInfo): Promise<Persona[] | []> =>
 
   const query = `SELECT * FROM persona ${where.length?('WHERE'+where):''}`;
 
-  return new Promise((resolve, reject) => {
-      var personas: Persona[] = [];
+return new Promise((resolve, reject) => {
+      var personas: PersonaConDirecciones[] = [];
       try {
-          pool.query(query, function(error: any, rows: RowDataPacket[]) {
-
+          pool.query(query, async function(error: any, rows: RowDataPacket[]) {
+            try {
               if (error) return reject(error.code);      
               if (rows.length <= 0) return reject('Not found');             
 
               for (let i = 0; i < rows.length; i++) {
-                  const persona: Persona = {
+                  const persona: PersonaConDirecciones = {
                       dni: rows[i].dni,
                       nombre: rows[i].nombre,
                       apellido: rows[i].apellido,
                       edad: rows[i].edad,
                       foto: rows[i].foto,
+                      direcciones: []
                   };
 
-                  if (persona) personas.push(persona);
+                  if (persona) {
+                    console.log(persona);
+                    let direccion = await findAllDireccionesByDni(persona.dni);
+                    if (direccion) {
+                        persona.direcciones = direccion;
+                    }
+                    console.log(direccion);
+                    personas.push(persona)
+                };
+
               }
               
               return resolve(personas);
+            } catch (error) {
+              return reject('Error database');
+            }
           });                            
       } catch (error) {
           return reject('Error database');
