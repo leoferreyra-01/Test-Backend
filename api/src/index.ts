@@ -1,7 +1,9 @@
 const app = require('./app.ts');
-const config = require('./config/config.ts');
 
-const PORT = config.port || 3001;
+const dotenv = require('dotenv');
+dotenv.config();
+
+const PORT = process.env.PORT;
 
 app.listen(PORT, () => {
   console.log(`API server started on http://localhost:${PORT}`);
