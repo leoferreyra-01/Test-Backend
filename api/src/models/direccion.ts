@@ -1,14 +1,14 @@
 export interface Direccion {
-  id: number;         // ID de la dirección
+  id: string;         // ID de la dirección
   calle: string;      // Nombre de la calle
-  altura: number; // Número de la calle
+  altura: string; // Número de la calle
   ciudad: string;     // Ciudad
-  personadni: number; // DNI de la persona asociada
+  personadni: string; // DNI de la persona asociada
 }
 
 export interface DireccionInfo {
   calle?: string; 
-  altura?: number;
+  altura?: string;
   ciudad?: string;
-  personadni?: number;
+  personadni?: string;
 }

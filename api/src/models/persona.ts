@@ -1,17 +1,17 @@
 import { Direccion } from "./direccion";
 
 export interface Persona {
-  dni: number;        // DNI o ID de la persona
+  dni: string;        // DNI o ID de la persona
   nombre: string;     // Nombre de la persona
   apellido: string;   // Apellido de la persona
-  edad: number;       // Edad de la persona
+  edad: string;       // Edad de la persona
   foto?: string;      // URL o path a la foto de la persona
 }
 
 export interface PersonaInfo {
-  dni?: number;
+  dni?: string;
   nombre?: string;
-  edad?: number;
+  edad?: string;
 }
 
 export interface PersonaConDirecciones extends Persona {

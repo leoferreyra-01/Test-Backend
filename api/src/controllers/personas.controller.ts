@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { PersonaInfo, Persona } from '../models/persona';
-import { findAllPersonas, createNuevaPersona, updatePersonaActual, deletePersonaByDni} from '../services/persona.service';
+import { PersonaInfo, Persona, PersonaConDirecciones } from '../models/persona';
+import { findAllPersonas, findPersonaByDni, createNuevaPersona, updatePersonaActual, deletePersonaByDni, exportPersonas} from '../services/persona.service';
 
 export const getPersonas = async (req: Request, res: Response) => {
   try {
@@ -9,23 +9,11 @@ export const getPersonas = async (req: Request, res: Response) => {
       nombre, 
       edad
     } = req.query;
-    const dniNumber = Number(dni);
-    const edadNumber = Number(edad);
-    if (dni?.length){
-      if (isNaN(dniNumber)) {
-        return res.status(400).send('Invalid dni');
-      }
-    }
-    if (edad?.length){
-      if (isNaN(edadNumber)) {
-        return res.status(400).send('Invalid edad');
-      }
-    }
 
     const search : PersonaInfo = {
-      dni: dniNumber,
+      dni: dni as string,
       nombre: nombre as string,
-      edad: edadNumber,
+      edad: edad as string,
     }
     
     const personas = await findAllPersonas(search);
@@ -42,20 +30,11 @@ export const getPersonas = async (req: Request, res: Response) => {
   }
 };
 
-export const getPersonaById = async (req: Request, res: Response) => {
+export const getPersonaByDni = async (req: Request, res: Response) => {
   try{
     const { dni } = req.params;
 
-    if (dni.length > 8 || dni.length < 7){
-      return res.status(400).send('Invalid dni');
-    }
-
-    const dniNumber = Number(dni);
-    if (isNaN(dniNumber)) {
-      return res.status(400).send('Invalid dni');
-    }
-
-    const persona = await findAllPersonas({ dni: dniNumber });
+    const persona = await findPersonaByDni( dni );
 
     if (!persona.length) {
       return res.status(404).send('Not found');
@@ -79,32 +58,11 @@ export const createPersona = async (req: Request, res: Response) => {
       foto
     } = req.body;
 
-    if (dni.length > 8 || dni.length < 7){
-      return res.status(400).send('Invalid dni');
-    }
-
-    const dniNumber = Number(dni);
-    const edadNumber = Number(edad);
-
-    if (isNaN(dniNumber)) {
-      return res.status(400).send('Invalid dni');
-    }
-
-    if (edad?.length){
-      if (isNaN(edadNumber)) {
-        return res.status(400).send('Invalid edad');
-      }
-    }
-
-    if (edadNumber < 0 || edadNumber > 120) {
-      return res.status(400).send('Invalid age');
-    }
-
     const persona : Persona = {
-      dni: dniNumber,
+      dni: dni,
       nombre: nombre as string,
       apellido: apellido as string,
-      edad: edadNumber,
+      edad: edad,
       foto: foto || null,
     };
 
@@ -127,28 +85,11 @@ export const updatePersona = async (req: Request, res: Response) => {
       foto
     } = req.body;
 
-    if (dni.length > 8 || dni.length < 7){
-      return res.status(400).send('Invalid dni');
-    }
-    const dniNumber = Number(dni);
-    if (isNaN(dniNumber)) {
-      return res.status(400).send('Invalid dni');
-    }
-    const edadNumber = Number(edad);
-    if (edad?.length){
-      if (isNaN(edadNumber)) {
-        return res.status(400).send('Invalid edad');
-      }
-    }
-    if (edadNumber < 0 || edadNumber > 120) {
-      return res.status(400).send('Invalid age');
-    }
-
     const personaActual : Persona = {
-      dni: dniNumber,
+      dni: dni as string,
       nombre: nombre as string,
       apellido: apellido as string,
-      edad: edadNumber,
+      edad: edad as string,
       foto: foto || null,
     }
 
@@ -166,19 +107,33 @@ export const deletePersona = async (req: Request, res: Response) => {
   try {
     const { dni } = req.params;
 
-    if (dni.length > 8 || dni.length < 7){
-      return res.status(400).send('Invalid dni');
-    }
-
-    const dniNumber = Number(dni);
-    if (isNaN(dniNumber)) {
-      return res.status(400).send('Invalid dni');
-    }
-
-    const persona = await deletePersonaByDni(dniNumber);
+    const persona = await deletePersonaByDni(dni);
 
     return res.status(200).json(persona);
 
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: error });
+  }
+};
+
+export const getPersonasExportar = async (req: Request, res: Response) => {
+  try{
+    const {
+      dni, 
+      nombre, 
+      edad
+    } = req.query;
+
+    const search : PersonaInfo = {
+      dni: dni as string,
+      nombre: nombre as string,
+      edad: edad as string,
+    }
+    const personas : PersonaConDirecciones[] = await findAllPersonas(search);
+    const exportacion = await exportPersonas(personas);
+
+    return res.status(200).json(exportacion);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: error });

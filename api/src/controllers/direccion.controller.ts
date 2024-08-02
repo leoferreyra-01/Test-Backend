@@ -14,26 +14,11 @@ export const createDireccion = async (req: Request, res: Response) => {
       ciudad
     } = req.body;
 
-    if (dni.length > 8 || dni.length < 7){
-      return res.status(400).send('Invalid dni');
-    }
-
-    const dniNumber = Number(dni);
-    const alturaNumber = Number(altura);
-
-    if (isNaN(dniNumber)) {
-      return res.status(400).send('Invalid dni');
-    }
-
-    if (isNaN(alturaNumber)) {
-      return res.status(400).send('Invalid edad');
-    }
-
     const direccion : DireccionInfo = {
       calle: calle as string,
-      altura: alturaNumber,
+      altura: altura,
       ciudad: ciudad as string,
-      personadni: dniNumber,
+      personadni: dni,
     };
 
     const resultado = await asociarNuevaDireccion(direccion);
@@ -55,31 +40,12 @@ export const updateDireccion = async (req: Request, res: Response) => {
       personadni
     } = req.body;
 
-    if (personadni.length)  {
-      return res.status(400).json('Cannot change the dni of Direccion')
-    }
-    const alturaNumber = Number(altura);
-    const dniNumber = Number(personadni);
-    const idNumber = Number(id);
-    if (altura?.length){
-      if (isNaN(alturaNumber)) {
-        return res.status(400).send('Invalid edad');
-      }
-    }
-    if (alturaNumber < 0 || alturaNumber > 120) {
-      return res.status(400).send('Invalid age');
-    }
-
-    if (isNaN(idNumber)) {
-      return res.status(400).send('Invalid id');
-    }
-
     const direccionActual : Direccion = {
-      id: idNumber,
+      id: id,
       calle: calle as string,
-      altura: alturaNumber,
+      altura: altura,
       ciudad: ciudad as string,
-      personadni: dniNumber,
+      personadni: personadni,
     }
 
     const resultado = await updateDireccionActual(direccionActual)
@@ -96,16 +62,7 @@ export const deleteDireccion = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
 
-    if (id.length > 8 || id.length < 7){
-      return res.status(400).send('Invalid id');
-    }
-
-    const idNumber = Number(id);
-    if (isNaN(idNumber)) {
-      return res.status(400).send('Invalid id');
-    }
-
-    const persona = await deleteDireccionById(idNumber);
+    const persona = await deleteDireccionById(id);
 
     return res.status(200).json(persona);
 

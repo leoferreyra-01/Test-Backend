@@ -3,7 +3,7 @@ import { Persona, PersonaInfo } from '../models/persona';
 import { Direccion, DireccionInfo } from '../models/direccion';
 import { ResultSetHeader, RowDataPacket } from 'mysql2';
 
-export const findAllDireccionesByDni = (personadni: number): Promise<any[] | []> => {
+export const findAllDireccionesByDni = (personadni: string): Promise<any[] | []> => {
 
   const query = `SELECT * FROM direccion WHERE personadni = '${personadni}'`;
 
@@ -88,7 +88,7 @@ export const updateDireccionActual = (direccion: Direccion): Promise<void> => {
   });
 }
 
-export const deleteDireccionById = (id: number): Promise<void> => {
+export const deleteDireccionById = (id: string): Promise<void> => {
 
   const query = `DELETE FROM direccion WHERE dni=${id}`;
 

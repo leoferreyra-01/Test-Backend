@@ -4,13 +4,12 @@ import { Persona, PersonaConDirecciones, PersonaInfo } from '../models/persona';
 import { ResultSetHeader, RowDataPacket } from 'mysql2';
 import { findAllDireccionesByDni } from './direccion.service';
 
-//TODO Implementar integracion de la tabala de direccion
 export const findAllPersonas = (search: PersonaInfo): Promise<PersonaConDirecciones[] | []> => {
 
   var where = '';
   if (search.dni) where += `${where.length?' AND':''} dni LIKE '%${search.dni}%'`;
   if (search.nombre) where += `${where.length?' AND':''} nombre LIKE '%${search.nombre}%'`;
-  if (search.edad) where += `${where.length?' AND':''} edad LIKE '%${search.edad}%'`;
+  if (search.edad) where += `${where.length?' AND':''} edad = '${search.edad}'`;
 
   const query = `SELECT * FROM persona ${where.length?('WHERE'+where):''}`;
 
@@ -34,15 +33,59 @@ return new Promise((resolve, reject) => {
 
                   if (persona) {
                     console.log(persona);
-                    let direccion = await findAllDireccionesByDni(persona.dni);
-                    if (direccion) {
-                        persona.direcciones = direccion;
+                    const direcciones = await findAllDireccionesByDni(persona.dni);
+                    if (direcciones) {
+                        persona.direcciones = direcciones;
                     }
-                    console.log(direccion);
+                    console.log(direcciones);
                     personas.push(persona)
                 };
 
               }
+              
+              return resolve(personas);
+            } catch (error) {
+              return reject('Error database');
+            }
+          });                            
+      } catch (error) {
+          return reject('Error database');
+      }
+  });
+}
+
+export const findPersonaByDni = (dni: string): Promise<PersonaConDirecciones[] | []> => {
+
+  const query = `SELECT * FROM persona WHERE dni = '${dni}'`;
+
+return new Promise((resolve, reject) => {
+      var personas: PersonaConDirecciones[] = [];
+      try {
+          pool.query(query, async function(error: any, rows: RowDataPacket[]) {
+            try {
+              if (error) return reject(error.code);      
+              if (rows.length <= 0) return reject('Not found');       
+              
+              console.log(rows)
+
+                  const persona: PersonaConDirecciones = {
+                      dni: rows[0].dni,
+                      nombre: rows[0].nombre,
+                      apellido: rows[0].apellido,
+                      edad: rows[0].edad,
+                      foto: rows[0].foto,
+                      direcciones: []
+                  };
+
+                  if (persona) {
+                    console.log(persona);
+                    const direcciones = await findAllDireccionesByDni(persona.dni);
+                    if (direcciones) {
+                        persona.direcciones = direcciones;
+                    }
+                    console.log(direcciones);
+                    personas.push(persona)
+                };
               
               return resolve(personas);
             } catch (error) {
@@ -109,7 +152,7 @@ export const updatePersonaActual = (persona: Persona): Promise<void> => {
   });
 }
 
-export const deletePersonaByDni = (dni: number): Promise<void> => {
+export const deletePersonaByDni = (dni: string): Promise<void> => {
 
   const query = `DELETE FROM persona WHERE dni=${dni}`;
 
@@ -124,4 +167,15 @@ export const deletePersonaByDni = (dni: number): Promise<void> => {
           return reject('Error database');
       }
   });
+}
+//TODO getPersonasExportar
+export const exportPersonas = (personas: PersonaConDirecciones[]): Promise< any > => {
+  try {
+    // Implementación para exportar personas y direcciones a un archivo CSV o similar
+    //...
+
+    return Promise.resolve('Exportación realizada con éxito');
+  } catch (error) {
+    return Promise.reject('Error al exportar personas');
+  }
 }
