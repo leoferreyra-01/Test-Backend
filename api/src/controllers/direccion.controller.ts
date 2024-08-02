@@ -41,7 +41,7 @@ export const updateDireccion = async (req: Request, res: Response) => {
     } = req.body;
 
     const direccionActual : Direccion = {
-      id: id,
+      id: Number(id),
       calle: calle as string,
       altura: altura,
       ciudad: ciudad as string,
