@@ -3,6 +3,8 @@ import { pool } from '../config/db';
 import { Persona, PersonaConDirecciones, PersonaInfo } from '../models/persona';
 import { ResultSetHeader, RowDataPacket } from 'mysql2';
 import { findAllDireccionesByDni } from './direccion.service';
+const exporter = require('json2csv').Parser;
+
 
 export const findAllPersonas = (search: PersonaInfo): Promise<PersonaConDirecciones[] | []> => {
 
@@ -13,44 +15,43 @@ export const findAllPersonas = (search: PersonaInfo): Promise<PersonaConDireccio
 
   const query = `SELECT * FROM persona ${where.length?('WHERE'+where):''}`;
 
-return new Promise((resolve, reject) => {
-      var personas: PersonaConDirecciones[] = [];
-      try {
-          pool.query(query, async function(error: any, rows: RowDataPacket[]) {
-            try {
-              if (error) return reject(error.code);      
-              if (rows.length <= 0) return reject('Not found');             
+  return new Promise((resolve, reject) => {
+    var personas: PersonaConDirecciones[] = [];
+    try {
+      pool.query(query, async function(error: any, rows: RowDataPacket[]) {
+        try {
+          if (error) return reject(error.code);      
+          if (rows.length <= 0) return reject('Not found');   
+          
+          for (let i = 0; i < rows.length; i++) {
+              const persona: PersonaConDirecciones = {
+                  dni: rows[i].dni,
+                  nombre: rows[i].nombre,
+                  apellido: rows[i].apellido,
+                  edad: rows[i].edad,
+                  foto: rows[i].foto,
+                  direcciones: []
+              };
 
-              for (let i = 0; i < rows.length; i++) {
-                  const persona: PersonaConDirecciones = {
-                      dni: rows[i].dni,
-                      nombre: rows[i].nombre,
-                      apellido: rows[i].apellido,
-                      edad: rows[i].edad,
-                      foto: rows[i].foto,
-                      direcciones: []
-                  };
-
-                  if (persona) {
-                    console.log(persona);
-                    const direcciones = await findAllDireccionesByDni(persona.dni);
-                    if (direcciones) {
-                        persona.direcciones = direcciones;
-                    }
-                    console.log(direcciones);
-                    personas.push(persona)
-                };
-
-              }
-              
-              return resolve(personas);
-            } catch (error) {
-              return reject('Error database');
+              if (persona) {
+                console.log(persona);
+                const direcciones = await findAllDireccionesByDni(persona.dni);
+                if (direcciones) {
+                  persona.direcciones = direcciones;
+                }
+                console.log(direcciones);
+                personas.push(persona)
+            };
             }
-          });                            
-      } catch (error) {
-          return reject('Error database');
-      }
+
+            return resolve(personas);
+          } catch (error) {
+            return reject('Error database');
+          }
+        });                            
+    } catch (error) {
+        return reject('Error database');
+    }
   });
 }
 
@@ -170,12 +171,17 @@ export const deletePersonaByDni = (dni: string): Promise<void> => {
 }
 //TODO getPersonasExportar
 export const exportPersonas = (personas: PersonaConDirecciones[]): Promise< any > => {
-  try {
-    // Implementación para exportar personas y direcciones a un archivo CSV o similar
-    //...
 
-    return Promise.resolve('Exportación realizada con éxito');
-  } catch (error) {
-    return Promise.reject('Error al exportar personas');
-  }
+  return new Promise((resolve, reject) => {
+    try {
+      const file = ['dni', 'nombre', 'apellido', 'edad', 'foto', 'direcciones']
+      const opts = {file}
+      const json = new exporter({opts})
+      const csv = json.parse(personas);
+
+      return resolve(csv);
+    } catch (error) {
+      return reject('Error al exportar personas');
+    }
+  });
 }

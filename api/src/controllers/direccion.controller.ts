@@ -6,7 +6,7 @@ import { Direccion, DireccionInfo } from '../models/direccion';
 export const createDireccion = async (req: Request, res: Response) => {
   try {
 
-    const { dni } = req.params;
+    const { personadni } = req.params;
     
     const {
       calle, 
@@ -18,7 +18,7 @@ export const createDireccion = async (req: Request, res: Response) => {
       calle: calle as string,
       altura: altura,
       ciudad: ciudad as string,
-      personadni: dni,
+      personadni: personadni,
     };
 
     const resultado = await asociarNuevaDireccion(direccion);

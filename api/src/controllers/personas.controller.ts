@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { PersonaInfo, Persona, PersonaConDirecciones } from '../models/persona';
 import { findAllPersonas, findPersonaByDni, createNuevaPersona, updatePersonaActual, deletePersonaByDni, exportPersonas} from '../services/persona.service';
+import { writeFile } from 'fs';
 
 export const getPersonas = async (req: Request, res: Response) => {
   try {
@@ -132,8 +133,11 @@ export const getPersonasExportar = async (req: Request, res: Response) => {
     }
     const personas : PersonaConDirecciones[] = await findAllPersonas(search);
     const exportacion = await exportPersonas(personas);
+    res.header('Content-Type', 'text/csv');
+    res.attachment('personas.csv');
+    res.send(exportacion);
 
-    return res.status(200).json(exportacion);
+    // return res.status(200).json(exportacion);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: error });

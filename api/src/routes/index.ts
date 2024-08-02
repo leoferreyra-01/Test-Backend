@@ -26,11 +26,11 @@ export const routes = (app : any) => {
 
   router.delete('/api/personas/:dni', validateDeletePersonas, (req: Request, res: Response) => deletePersona(req, res))
 
-  router.post('/api/direccion/:dni', validatePostDireccion, (req: Request, res: Response) => createDireccion(req, res))
+  router.post('/api/direccion/:personadni', validatePostDireccion, (req: Request, res: Response) => createDireccion(req, res))
 
   router.put('/api/direccion/:id', validatePutDireccion, (req: Request, res: Response) => updateDireccion(req, res))
 
-  router.delete('/api/direccion/:dni', validateDeleteDireccion, (req: Request, res: Response) => deleteDireccion(req, res))
+  router.delete('/api/direccion/:id', validateDeleteDireccion, (req: Request, res: Response) => deleteDireccion(req, res))
 
   app.use(router);
 }
