@@ -169,7 +169,7 @@ export const deletePersonaByDni = (dni: string): Promise<void> => {
       }
   });
 }
-//TODO getPersonasExportar
+
 export const exportPersonas = (personas: PersonaConDirecciones[]): Promise< any > => {
 
   return new Promise((resolve, reject) => {
