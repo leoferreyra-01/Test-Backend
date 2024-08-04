@@ -24,7 +24,7 @@ describe('validatePostPersonas middleware', () => {
       nombre: 'nombre',
       apellido: 'apellido',
       edad: '25',
-      foto: 'foto.jpg'
+      foto: 'https://foto.jpg'
     };
 
     await validatePostPersonas(mockRequest as Request, mockResponse as Response, mockNext);
@@ -47,7 +47,7 @@ describe('validatePostPersonas middleware', () => {
       nombre: 'nombre',
       apellido: 'apellido',
       edad: '25',
-      foto: 'foto.jpg'
+      foto: 'https://foto.jpg'
     };
 
     await validatePostPersonas(mockRequest as Request, mockResponse as Response, mockNext);
@@ -70,7 +70,7 @@ describe('validatePostPersonas middleware', () => {
       nombre: 'nombre',
       apellido: 'apellido',
       edad: '25',
-      foto: 'foto.jpg'
+      foto: 'https://foto.jpg'
     };
 
     await validatePostPersonas(mockRequest as Request, mockResponse as Response, mockNext);
@@ -92,7 +92,7 @@ describe('validatePostPersonas middleware', () => {
       nombre: 'nombre',
       apellido: 'apellido',
       edad: '25',
-      foto: 'foto.jpg'
+      foto: 'https://foto.jpg'
     };
 
     await validatePostPersonas(mockRequest as Request, mockResponse as Response, mockNext);
@@ -115,7 +115,7 @@ describe('validatePostPersonas middleware', () => {
       nombre: 'Juan3',
       apellido: 'apellido',
       edad: '25',
-      foto: 'foto.jpg'
+      foto: 'https://foto.jpg'
     };
 
     await validatePostPersonas(mockRequest as Request, mockResponse as Response, mockNext);
@@ -138,7 +138,7 @@ describe('validatePostPersonas middleware', () => {
       nombre: 'a',
       apellido: 'apellido',
       edad: '25',
-      foto: 'foto.jpg'
+      foto: 'https://foto.jpg'
     };
 
     await validatePostPersonas(mockRequest as Request, mockResponse as Response, mockNext);
@@ -160,7 +160,7 @@ describe('validatePostPersonas middleware', () => {
       dni: '12345678',
       apellido: 'apellido',
       edad: '25',
-      foto: 'foto.jpg'
+      foto: 'https://foto.jpg'
     };
 
     await validatePostPersonas(mockRequest as Request, mockResponse as Response, mockNext);
@@ -183,7 +183,7 @@ describe('validatePostPersonas middleware', () => {
       nombre: 'nombre',
       apellido: 'Perez3',
       edad: '25',
-      foto: 'foto.jpg'
+      foto: 'https://foto.jpg'
     };
 
     await validatePostPersonas(mockRequest as Request, mockResponse as Response, mockNext);
@@ -206,7 +206,7 @@ describe('validatePostPersonas middleware', () => {
       nombre: 'nombre',
       apellido: 'a',
       edad: '25',
-      foto: 'foto.jpg'
+      foto: 'https://foto.jpg'
     };
 
     await validatePostPersonas(mockRequest as Request, mockResponse as Response, mockNext);
@@ -228,7 +228,7 @@ describe('validatePostPersonas middleware', () => {
       dni: '12345678',
       nombre: 'nombre',
       edad: '25',
-      foto: 'foto.jpg'
+      foto: 'https://foto.jpg'
     };
 
     await validatePostPersonas(mockRequest as Request, mockResponse as Response, mockNext);
@@ -251,7 +251,7 @@ describe('validatePostPersonas middleware', () => {
       nombre: 'nombre',
       apellido: 'apellido',
       edad: 'pro',
-      foto: 'foto.jpg'
+      foto: 'https://foto.jpg'
     };
 
     await validatePostPersonas(mockRequest as Request, mockResponse as Response, mockNext);
@@ -274,7 +274,7 @@ describe('validatePostPersonas middleware', () => {
       nombre: 'nombre',
       apellido: 'apellido',
       edad: '',
-      foto: 'foto.jpg'
+      foto: 'https://foto.jpg'
     };
 
     await validatePostPersonas(mockRequest as Request, mockResponse as Response, mockNext);
@@ -301,7 +301,7 @@ describe('validatePostPersonas middleware', () => {
       nombre: 'nombre',
       apellido: 'apellido',
       edad: '2500',
-      foto: 'foto.jpg'
+      foto: 'https://foto.jpg'
     };
 
     await validatePostPersonas(mockRequest as Request, mockResponse as Response, mockNext);
@@ -323,7 +323,7 @@ describe('validatePostPersonas middleware', () => {
       dni: '12345678',
       nombre: 'nombre',
       apellido: 'apellido',
-      foto: 'foto.jpg'
+      foto: 'https://foto.jpg'
     };
 
     await validatePostPersonas(mockRequest as Request, mockResponse as Response, mockNext);
@@ -334,6 +334,29 @@ describe('validatePostPersonas middleware', () => {
           {
             "element": "body.edad", 
             "message": "body.edad is a required field"
+          }
+        ]
+      }));
+    expect(mockNext).not.toHaveBeenCalled();
+  });
+
+  it('Deberia denegar la creacion si foto no es del formato url', async () => {
+    mockRequest.body = {
+      dni: '12345678',
+      nombre: 'nombre',
+      apellido: 'apellido',
+      edad: '25',
+      foto: 'foto.jpg'
+    };
+
+    await validatePostPersonas(mockRequest as Request, mockResponse as Response, mockNext);
+    expect(mockResponse.status).toHaveBeenCalledWith(400);
+    expect(mockResponse.json).toHaveBeenCalledWith(expect.objectContaining({
+      "errors": 
+        [
+          {
+            "element": "body.foto", 
+            "message": "body.foto must be a valid URL"
           }
         ]
       }));

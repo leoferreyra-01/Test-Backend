@@ -172,7 +172,6 @@ export const exportPersonas = (personas: PersonaConDirecciones[]): Promise< any 
 
       for (let i = 0; i < personas.length; i++) {
         const persona = personas[i];
-        console.log(persona.direcciones.length);
         if(persona.direcciones.length <= 0) { 
           const newPersona = {
             dni: persona.dni,
@@ -199,7 +198,6 @@ export const exportPersonas = (personas: PersonaConDirecciones[]): Promise< any 
         };
         personasDireccion.push(newPersona);
       }
-      console.log(personasDireccion);
 
       const csv = json.parse(personasDireccion);
 

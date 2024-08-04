@@ -24,7 +24,7 @@ describe('validatePutPersonas middleware', () => {
       nombre: 'nombre',
       apellido: 'apellido',
       edad: '25',
-      foto: 'foto.jpg'
+      foto: 'https://foto.jpg'
     };
     mockRequest.params = {
       dni: 'probando',
@@ -49,7 +49,7 @@ describe('validatePutPersonas middleware', () => {
       nombre: 'nombre',
       apellido: 'apellido',
       edad: '25',
-      foto: 'foto.jpg'
+      foto: 'https://foto.jpg'
     };
 
     mockRequest.params = {
@@ -75,7 +75,7 @@ describe('validatePutPersonas middleware', () => {
       nombre: 'nombre',
       apellido: 'apellido',
       edad: '25',
-      foto: 'foto.jpg'
+      foto: 'https://foto.jpg'
     };
 
     mockRequest.params = {
@@ -101,7 +101,7 @@ describe('validatePutPersonas middleware', () => {
       nombre: 'nombre',
       apellido: 'apellido',
       edad: '25',
-      foto: 'foto.jpg'
+      foto: 'https://foto.jpg'
     };
 
     mockRequest.params = {
@@ -127,7 +127,7 @@ describe('validatePutPersonas middleware', () => {
       nombre: 'nombre',
       apellido: 'apellido',
       edad: '25',
-      foto: 'foto.jpg'
+      foto: 'https://foto.jpg'
     };
 
     mockRequest.params = {
@@ -153,7 +153,7 @@ describe('validatePutPersonas middleware', () => {
       nombre: 'Juan3',
       apellido: 'apellido',
       edad: '25',
-      foto: 'foto.jpg'
+      foto: 'https://foto.jpg'
     };
 
     mockRequest.params = {
@@ -179,7 +179,7 @@ describe('validatePutPersonas middleware', () => {
       nombre: 'a',
       apellido: 'apellido',
       edad: '25',
-      foto: 'foto.jpg'
+      foto: 'https://foto.jpg'
     };
 
     mockRequest.params = {
@@ -205,7 +205,7 @@ describe('validatePutPersonas middleware', () => {
       nombre: 'nombre',
       apellido: 'Perez3',
       edad: '25',
-      foto: 'foto.jpg'
+      foto: 'https://foto.jpg'
     };
 
     mockRequest.params = {
@@ -231,7 +231,7 @@ describe('validatePutPersonas middleware', () => {
       nombre: 'nombre',
       apellido: 'a',
       edad: '25',
-      foto: 'foto.jpg'
+      foto: 'https://foto.jpg'
     };
 
     mockRequest.params = {
@@ -257,7 +257,7 @@ describe('validatePutPersonas middleware', () => {
       nombre: 'nombre',
       apellido: 'apellido',
       edad: 'pro',
-      foto: 'foto.jpg'
+      foto: 'https://foto.jpg'
     };
 
     mockRequest.params = {
@@ -283,7 +283,7 @@ describe('validatePutPersonas middleware', () => {
       nombre: 'nombre',
       apellido: 'apellido',
       edad: '',
-      foto: 'foto.jpg'
+      foto: 'https://foto.jpg'
     };
 
     mockRequest.params = {
@@ -309,7 +309,7 @@ describe('validatePutPersonas middleware', () => {
       nombre: 'nombre',
       apellido: 'apellido',
       edad: '2500',
-      foto: 'foto.jpg'
+      foto: 'https://foto.jpg'
     };
 
     mockRequest.params = {
@@ -324,6 +324,32 @@ describe('validatePutPersonas middleware', () => {
           {
             "element": "body.edad", 
             "message": "body.edad must be at most 3 characters"
+          }
+        ]
+      }));
+    expect(mockNext).not.toHaveBeenCalled();
+  });
+
+  it('Deberia denegar la actualizacion si foto no es del formato url', async () => {
+    mockRequest.body = {
+      nombre: 'nombre',
+      apellido: 'apellido',
+      edad: '25',
+      foto: 'foto.jpg'
+    };
+
+    mockRequest.params = {
+      dni: '12345678'
+    };
+
+    await validatePutPersonas(mockRequest as Request, mockResponse as Response, mockNext);
+    expect(mockResponse.status).toHaveBeenCalledWith(400);
+    expect(mockResponse.json).toHaveBeenCalledWith(expect.objectContaining({
+      "errors": 
+        [
+          {
+            "element": "body.foto", 
+            "message": "body.foto must be a valid URL"
           }
         ]
       }));

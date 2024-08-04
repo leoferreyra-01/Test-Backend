@@ -9,7 +9,7 @@ const createPersonaSchema = yup.object({
     nombre: yup.string().required().min(2).matches(regexOnlyChar, 'body.nombre must be a string whitout numbers'),
     apellido: yup.string().required().min(2).matches(regexOnlyChar, 'body.apellido must be a string whitout numbers'),
     edad: yup.string().required().min(1).max(3).matches(regexOnlyNumber, 'body.edad must be a number'),
-    foto: yup.string()
+    foto: yup.string().url()
   })
 });
 
