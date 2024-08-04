@@ -1,4 +1,3 @@
-import { Direccion } from './../models/direccion';
 import { pool } from '../config/db';
 import { Persona, PersonaConDirecciones, PersonaInfo } from '../models/persona';
 import { ResultSetHeader, RowDataPacket } from 'mysql2';

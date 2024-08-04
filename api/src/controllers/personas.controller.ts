@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { PersonaInfo, Persona, PersonaConDirecciones } from '../models/persona';
 import { findAllPersonas, findPersonaByDni, createNuevaPersona, updatePersonaActual, deletePersonaByDni, exportPersonas} from '../services/persona.service';
-import { writeFile } from 'fs';
 
 export const getPersonas = async (req: Request, res: Response) => {
   try {

@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import { PersonaInfo, Persona } from '../models/persona';
 import { asociarNuevaDireccion, updateDireccionActual, deleteDireccionById} from '../services/direccion.service';
 import { Direccion, DireccionInfo } from '../models/direccion';
 
