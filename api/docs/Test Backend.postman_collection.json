@@ -1,0 +1,155 @@
+{
+	"info": {
+		"_postman_id": "ec472cdc-40b2-4e40-b6fd-d28b1986c800",
+		"name": "Test Backend",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "20450492"
+	},
+	"item": [
+		{
+			"name": "Local",
+			"item": [
+				{
+					"name": "Persona",
+					"item": [
+						{
+							"name": "Get All Personas",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "localhost:3001/api/personas"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Persona by dni",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "localhost:3001/api/personas/12345678"
+							},
+							"response": []
+						},
+						{
+							"name": "Post Persona",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"dni\": \"65430000\",\n    \"nombre\": \"Pedro\",\n    \"apellido\": \"Sanchez\",\n    \"edad\": \"35\",\n    \"foto\": \"https://foto2.jpg\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "localhost:3001/api/personas"
+							},
+							"response": []
+						},
+						{
+							"name": "Put Persona",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"nombre\": \"Roberto\",\n    \"apellido\": \"Carlos\",\n    \"edad\": \"80\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "localhost:3001/api/personas/1234567"
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Persona",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": "localhost:3001/api/personas/65430000"
+							},
+							"response": []
+						},
+						{
+							"name": "Exportar csv",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "localhost:3001/api/personas/exportar"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Direccion",
+					"item": [
+						{
+							"name": "Post Direccion",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"calle\": \"Carrera 456\",\n    \"altura\": \"789\",\n    \"ciudad\": \"Springfield\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "localhost:3001/api/direccion/98765432"
+							},
+							"response": []
+						},
+						{
+							"name": "Put Direccion",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"calle\": \"nueva\",\n    \"altura\": \"123\",\n    \"ciudad\": \"amsterdam\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "localhost:3001/api/direccion/2"
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Direccion",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": "localhost:3001/api/direccion/2"
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Cloud",
+			"item": [
+				{
+					"name": "New Request",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
