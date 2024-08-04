@@ -16,6 +16,7 @@ const router = express.Router();
 export const routes = (app : any) => {
   router.get('/api/personas', validateGetPersonas, (req: Request, res: Response) => getPersonas(req, res))
 
+  // Para el export de las personas en un archivo csv se decidio realizar el export con la primer direccion, si es que tiene mas de una.
   router.get('/api/personas/exportar', (req: Request, res: Response) => getPersonasExportar(req, res))
 
   router.get('/api/personas/:dni', validateGetPersonasByDni, (req: Request, res: Response) => getPersonaByDni(req, res))
