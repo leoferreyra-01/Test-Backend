@@ -5,7 +5,7 @@ import { regexOnlyNumber, yupValidate } from './helper';
 
 const getPersonasByDniSchema = yup.object({
   params: yup.object({
-    dni:  yup.string().min(7).max(8).matches(regexOnlyNumber, 'query.dni must be a number')
+    dni:  yup.string().min(7).max(8).matches(regexOnlyNumber, 'params.dni must be a number')
   })
 });
 

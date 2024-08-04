@@ -1,6 +1,5 @@
-import { Request, Response, NextFunction } from 'express';
-
 import { validateGetPersonas } from '../../src/middleware/validateGetPersonas.middleware';
+import { Request, Response, NextFunction } from 'express';
 
 describe('validateGetPersonas middleware', () => {
 

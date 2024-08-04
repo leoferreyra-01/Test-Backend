@@ -1,7 +1,4 @@
-import request from 'supertest';
-import { default as app } from '../../src/app';
 import { findAllPersonas, findPersonaByDni, createNuevaPersona, updatePersonaActual, deletePersonaByDni} from '../../src/services/persona.service';
-import { data } from '../datosDePrueba';
 import { Persona } from '../../src/models/persona';
 
 describe('Persona Controller', () => {
