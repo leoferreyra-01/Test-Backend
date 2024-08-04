@@ -166,10 +166,43 @@ export const exportPersonas = (personas: PersonaConDirecciones[]): Promise< any 
 
   return new Promise((resolve, reject) => {
     try {
-      const file = ['dni', 'nombre', 'apellido', 'edad', 'foto', 'direcciones']
+      const file = ['dni', 'nombre', 'apellido', 'edad', 'foto', 'calle', 'altura', 'ciudad']
       const opts = {file}
       const json = new exporter({opts})
-      const csv = json.parse(personas);
+      const personasDireccion = [];
+
+      for (let i = 0; i < personas.length; i++) {
+        const persona = personas[i];
+        console.log(persona.direcciones.length);
+        if(persona.direcciones.length <= 0) { 
+          const newPersona = {
+            dni: persona.dni,
+          nombre: persona.nombre,
+          apellido: persona.apellido,
+          edad: persona.edad,
+          foto: persona.foto,
+          calle: '',
+          altura: '',
+          ciudad: ''
+          };
+          personasDireccion.push(newPersona);
+          continue
+        }
+        const newPersona = {
+          dni: persona.dni,
+          nombre: persona.nombre,
+          apellido: persona.apellido,
+          edad: persona.edad,
+          foto: persona.foto,
+          calle: persona.direcciones[0].calle,
+          altura: persona.direcciones[0].altura,
+          ciudad: persona.direcciones[0].ciudad
+        };
+        personasDireccion.push(newPersona);
+      }
+      console.log(personasDireccion);
+
+      const csv = json.parse(personasDireccion);
 
       return resolve(csv);
     } catch (error) {
