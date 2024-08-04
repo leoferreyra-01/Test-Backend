@@ -1,4 +1,4 @@
-const app = require('./app.ts');
+import { default as app } from '../src/app';
 
 const dotenv = require('dotenv');
 dotenv.config();

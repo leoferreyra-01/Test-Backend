@@ -35,7 +35,7 @@ export const findAllDireccionesByDni = (personadni: string): Promise<any[] | []>
   });
 }
 
-export const asociarNuevaDireccion = (direccion: DireccionInfo): Promise<void> => {
+export const asociarNuevaDireccion = (direccion: DireccionInfo): Promise<Direccion> => {
 
   const query = `INSERT INTO direccion (calle, altura, ciudad, personadni)
       VALUES ('${direccion.calle}', '${direccion.altura}', '${direccion.ciudad}', '${direccion.personadni}');`;
@@ -54,7 +54,7 @@ export const asociarNuevaDireccion = (direccion: DireccionInfo): Promise<void> =
                 personadni: direccion.personadni!
               }
 
-              return resolve();
+              return resolve(nuevaDireccion);
           });                            
       } catch (error) {
           return reject('Error database');

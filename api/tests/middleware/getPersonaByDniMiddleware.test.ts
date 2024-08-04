@@ -1,0 +1,1 @@
+import { validateGetPersonasByDni } from '../../src/middleware/validateGetPersonaByDni.middleware';

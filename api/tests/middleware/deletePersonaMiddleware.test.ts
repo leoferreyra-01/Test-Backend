@@ -1,0 +1,1 @@
+import { validateDeletePersonas } from '../../src/middleware/validateDeletePersona.middleware';

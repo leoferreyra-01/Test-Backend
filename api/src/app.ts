@@ -18,4 +18,4 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //Routes
 initRoutes(app);
 
-module.exports = app;
+export default app;

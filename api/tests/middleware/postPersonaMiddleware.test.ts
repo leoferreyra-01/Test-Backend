@@ -1,0 +1,1 @@
+import { validatePostPersonas } from '../../src/middleware/validatePostPersona.middleware';

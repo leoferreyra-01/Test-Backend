@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 
 export const regexOnlyNumber = /^\d*$/;
+export const regexOnlyChar = /^[^0-9]*$/;
 
 export const yupValidate = async (req: Request, res: Response, next: NextFunction, schemaToValidate: any) => {
     try {

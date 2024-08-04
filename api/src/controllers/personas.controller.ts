@@ -37,7 +37,7 @@ export const getPersonaByDni = async (req: Request, res: Response) => {
 
     const persona = await findPersonaByDni( dni );
 
-    if (!persona.length) {
+    if (!persona) {
       return res.status(404).send('Not found');
     }
 
@@ -69,7 +69,7 @@ export const createPersona = async (req: Request, res: Response) => {
 
     const resultado = await createNuevaPersona(persona);
 
-    return res.status(201).json(persona);
+    return res.status(201).json({message: 'Person created succesfully', body: resultado});
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: error });
@@ -96,7 +96,7 @@ export const updatePersona = async (req: Request, res: Response) => {
 
     const resultado = await updatePersonaActual(personaActual)
 
-    return res.status(200).json(personaActual);
+    return res.status(200).json({message: 'Person updated succesfully',body: resultado});
   
   } catch (error) {
     console.error(error);
@@ -108,9 +108,9 @@ export const deletePersona = async (req: Request, res: Response) => {
   try {
     const { dni } = req.params;
 
-    const persona = await deletePersonaByDni(dni);
+    await deletePersonaByDni(dni);
 
-    return res.status(200).json(persona);
+    return res.status(200).json({message: 'Person deleted succesfully'});
 
   } catch (error) {
     console.error(error);

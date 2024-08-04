@@ -6,7 +6,7 @@ import { findAllDireccionesByDni } from './direccion.service';
 const exporter = require('json2csv').Parser;
 
 
-export const findAllPersonas = (search: PersonaInfo): Promise<PersonaConDirecciones[] | []> => {
+export const findAllPersonas = (search: PersonaInfo = {}): Promise<PersonaConDirecciones[] | []> => {
 
   var where = '';
   if (search.dni) where += `${where.length?' AND':''} dni LIKE '%${search.dni}%'`;
@@ -34,12 +34,10 @@ export const findAllPersonas = (search: PersonaInfo): Promise<PersonaConDireccio
               };
 
               if (persona) {
-                console.log(persona);
                 const direcciones = await findAllDireccionesByDni(persona.dni);
                 if (direcciones) {
                   persona.direcciones = direcciones;
                 }
-                console.log(direcciones);
                 personas.push(persona)
             };
             }
@@ -55,19 +53,16 @@ export const findAllPersonas = (search: PersonaInfo): Promise<PersonaConDireccio
   });
 }
 
-export const findPersonaByDni = (dni: string): Promise<PersonaConDirecciones[] | []> => {
+export const findPersonaByDni = (dni: string): Promise<PersonaConDirecciones> => {
 
   const query = `SELECT * FROM persona WHERE dni = '${dni}'`;
 
 return new Promise((resolve, reject) => {
-      var personas: PersonaConDirecciones[] = [];
       try {
           pool.query(query, async function(error: any, rows: RowDataPacket[]) {
             try {
               if (error) return reject(error.code);      
               if (rows.length <= 0) return reject('Not found');       
-              
-              console.log(rows)
 
                   const persona: PersonaConDirecciones = {
                       dni: rows[0].dni,
@@ -79,16 +74,13 @@ return new Promise((resolve, reject) => {
                   };
 
                   if (persona) {
-                    console.log(persona);
                     const direcciones = await findAllDireccionesByDni(persona.dni);
                     if (direcciones) {
                         persona.direcciones = direcciones;
                     }
-                    console.log(direcciones);
-                    personas.push(persona)
+                    return resolve(persona);
                 };
               
-              return resolve(personas);
             } catch (error) {
               return reject('Error database');
             }
@@ -99,7 +91,7 @@ return new Promise((resolve, reject) => {
   });
 }
 
-export const createNuevaPersona = (persona: Persona): Promise<void> => {
+export const createNuevaPersona = (persona: Persona): Promise<Persona> => {
 
   const query = `INSERT INTO persona (dni, nombre, apellido, edad, foto)
       VALUES ('${persona.dni}', '${persona.nombre}', '${persona.apellido}', '${persona.edad}', '${persona.foto}');`;
@@ -118,7 +110,7 @@ export const createNuevaPersona = (persona: Persona): Promise<void> => {
                 foto: persona.foto
               }
 
-              return resolve();
+              return resolve(nuevaPersona);
           });                            
       } catch (error) {
           return reject('Error database');
@@ -126,7 +118,7 @@ export const createNuevaPersona = (persona: Persona): Promise<void> => {
   });
 }
 
-export const updatePersonaActual = (persona: Persona): Promise<void> => {
+export const updatePersonaActual = (persona: Persona): Promise<Persona> => {
 
   let varQuery: string = '';
   if (persona.nombre) { varQuery += ` nombre='${persona.nombre}'`; }
@@ -145,7 +137,7 @@ export const updatePersonaActual = (persona: Persona): Promise<void> => {
               if (error) return reject(error.code);      
               if (result.affectedRows === 0) return reject('Not found');      
 
-              return resolve();
+              return resolve(persona);
           });                            
       } catch (error) {
           return reject('Error database');

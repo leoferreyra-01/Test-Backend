@@ -21,9 +21,9 @@ export const createDireccion = async (req: Request, res: Response) => {
       personadni: personadni,
     };
 
-    const resultado = await asociarNuevaDireccion(direccion);
+    const resultado : Direccion = await asociarNuevaDireccion(direccion);
 
-    return res.status(201).json(direccion);
+    return res.status(201).json(resultado);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: error });
