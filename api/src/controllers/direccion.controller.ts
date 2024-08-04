@@ -26,7 +26,7 @@ export const createDireccion = async (req: Request, res: Response) => {
     return res.status(201).json({message: 'Direccion created succesfully', body: resultado});
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: error });
+    return res.status(500).json({errors : [{ element: error , message: 'Error creating direccion'}]});
   }
 };
 
@@ -52,7 +52,7 @@ export const updateDireccion = async (req: Request, res: Response) => {
   
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: error });
+    return res.status(500).json({errors : [{ element: error , message: 'Error editing direccion'}]});
   }
 };
 
@@ -66,6 +66,6 @@ export const deleteDireccion = async (req: Request, res: Response) => {
 
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: error });
+    return res.status(500).json({errors : [{ element: error , message: 'Error deleting direccion'}]});
   }
 };

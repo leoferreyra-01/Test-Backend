@@ -27,7 +27,7 @@ export const getPersonas = async (req: Request, res: Response) => {
     
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: error });
+    return res.status(500).json({errors : [{ element: error , message: 'Error geting persona'}]});
   }
 };
 
@@ -45,7 +45,7 @@ export const getPersonaByDni = async (req: Request, res: Response) => {
 
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: error });
+    return res.status(500).json({errors : [{ element: error , message: 'Error geting persona by dni'}]});
   }
 };
 
@@ -72,7 +72,7 @@ export const createPersona = async (req: Request, res: Response) => {
     return res.status(201).json({message: 'Person created succesfully', body: resultado});
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: error });
+    return res.status(500).json({errors : [{ element: error , message: 'Error creatng persona'}]});
   }
 };
 
@@ -100,7 +100,7 @@ export const updatePersona = async (req: Request, res: Response) => {
   
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: error });
+    return res.status(500).json({errors : [{ element: error , message: 'Error updating persona'}]});
   }
 };
 
@@ -114,7 +114,7 @@ export const deletePersona = async (req: Request, res: Response) => {
 
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: error });
+    return res.status(500).json({errors : [{ element: error , message: 'Error deleting persona'}]});
   }
 };
 
@@ -135,11 +135,9 @@ export const getPersonasExportar = async (req: Request, res: Response) => {
     const exportacion = await exportPersonas(personas);
     res.header('Content-Type', 'text/csv');
     res.attachment('personas.csv');
-    res.send(exportacion);
-
-    // return res.status(200).json(exportacion);
+    res.status(200).send(exportacion);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: error });
+    return res.status(500).json({errors : [{ element: error , message: 'Error exporting csv'}]});
   }
 };
