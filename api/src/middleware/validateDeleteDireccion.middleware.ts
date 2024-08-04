@@ -5,7 +5,7 @@ import { regexOnlyNumber, yupValidate } from './helper';
 
 const deleteDireccionSchema = yup.object({
   params: yup.object({
-    id:  yup.string().required().matches(regexOnlyNumber, 'query.id must be a number')
+    id:  yup.string().required().matches(regexOnlyNumber, 'params.id must be a number')
   })
 });
 

@@ -43,7 +43,6 @@ export const asociarNuevaDireccion = (direccion: DireccionInfo): Promise<Direcci
   return new Promise((resolve, reject) => {
       try {
           pool.query(query, async function(error : any, result: ResultSetHeader) { 
-
               if (error) return reject(error.code);      
               
               var nuevaDireccion: Direccion = {
@@ -62,7 +61,7 @@ export const asociarNuevaDireccion = (direccion: DireccionInfo): Promise<Direcci
   });
 }
 
-export const updateDireccionActual = (direccion: Direccion): Promise<void> => {
+export const updateDireccionActual = (direccion: DireccionInfo): Promise<DireccionInfo> => {
 
   let varQuery: string = '';
   if (direccion.calle) { varQuery += ` calle='${direccion.calle}'`; }
@@ -70,7 +69,7 @@ export const updateDireccionActual = (direccion: Direccion): Promise<void> => {
   if (direccion.ciudad) { varQuery += `${varQuery.length?',':''} ciudad='${direccion.ciudad}'`; }
 
 
-  const query = `UPDATE direccion SET ${varQuery} WHERE dni=${direccion.id}`;
+  const query = `UPDATE direccion SET ${varQuery} WHERE id=${direccion.id}`;
 
   return new Promise((resolve, reject) => {
       if (!varQuery.length) return reject('Error data');
@@ -80,7 +79,7 @@ export const updateDireccionActual = (direccion: Direccion): Promise<void> => {
               if (error) return reject(error.code);      
               if (result.affectedRows === 0) return reject('Not found');      
 
-              return resolve();
+              return resolve(direccion);
           });                            
       } catch (error) {
           return reject('Error database');
@@ -90,7 +89,7 @@ export const updateDireccionActual = (direccion: Direccion): Promise<void> => {
 
 export const deleteDireccionById = (id: string): Promise<void> => {
 
-  const query = `DELETE FROM direccion WHERE dni=${id}`;
+  const query = `DELETE FROM direccion WHERE id=${id}`;
 
   return new Promise((resolve, reject) => {
       try {

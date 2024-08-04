@@ -1,6 +1,5 @@
 import request from 'supertest';
 import { default as app } from '../../src/app';
-import { data } from '../datosDePrueba';
 
 describe('Persona Controller', () => {
 

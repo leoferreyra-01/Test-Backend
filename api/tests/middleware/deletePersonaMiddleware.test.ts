@@ -18,7 +18,7 @@ describe('validateDeletePersonas middleware', () => {
     mockNext = jest.fn();
   });
 
-  it('Deberia denegar la busqueda si el dni no es un numero', async () => {
+  it('Deberia denegar el delete si el dni no es un numero', async () => {
     mockRequest.params = {
       dni: 'probando'
     };
@@ -37,7 +37,7 @@ describe('validateDeletePersonas middleware', () => {
     expect(mockNext).not.toHaveBeenCalled();
   });
 
-  it('Deberia denegar la busqueda si el dni tiene menos de 7 caracteres', async () => {
+  it('Deberia denegar el delete si el dni tiene menos de 7 caracteres', async () => {
     mockRequest.params = {
       dni: '12345'
     };
@@ -56,7 +56,7 @@ describe('validateDeletePersonas middleware', () => {
     expect(mockNext).not.toHaveBeenCalled();
   });
 
-  it('Deberia denegar la busqueda si el dni tiene mas de 8 caracteres', async () => {
+  it('Deberia denegar el delete si el dni tiene mas de 8 caracteres', async () => {
     mockRequest.params = {
       dni: '123456789'
     };
@@ -69,6 +69,24 @@ describe('validateDeletePersonas middleware', () => {
           {
             "element": "params.dni", 
             "message": "params.dni must be at most 8 characters"
+          }
+        ]
+      }));
+    expect(mockNext).not.toHaveBeenCalled();
+  });
+
+  it('Deberia denegar el delete si no se le paso un dni', async () => {
+    mockRequest.params = {
+    };
+
+    await validateDeletePersonas(mockRequest as Request, mockResponse as Response, mockNext);
+    expect(mockResponse.status).toHaveBeenCalledWith(400);
+    expect(mockResponse.json).toHaveBeenCalledWith(expect.objectContaining({
+      "errors": 
+        [
+          {
+            "element": "params.dni", 
+            "message": "params.dni is a required field"
           }
         ]
       }));

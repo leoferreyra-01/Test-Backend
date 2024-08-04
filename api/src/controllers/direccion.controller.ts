@@ -23,7 +23,7 @@ export const createDireccion = async (req: Request, res: Response) => {
 
     const resultado : Direccion = await asociarNuevaDireccion(direccion);
 
-    return res.status(201).json(resultado);
+    return res.status(201).json({message: 'Direccion created succesfully', body: resultado});
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: error });
@@ -37,20 +37,18 @@ export const updateDireccion = async (req: Request, res: Response) => {
       calle, 
       altura, 
       ciudad,
-      personadni
     } = req.body;
 
-    const direccionActual : Direccion = {
+    const direccionActual : DireccionInfo = {
       id: Number(id),
       calle: calle as string,
       altura: altura,
-      ciudad: ciudad as string,
-      personadni: personadni,
+      ciudad: ciudad as string
     }
 
     const resultado = await updateDireccionActual(direccionActual)
 
-    return res.status(200).json(direccionActual);
+    return res.status(200).json({message: 'Direccion updated succesfully', body: resultado});
   
   } catch (error) {
     console.error(error);
@@ -62,9 +60,9 @@ export const deleteDireccion = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
 
-    const persona = await deleteDireccionById(id);
+    const resultado = await deleteDireccionById(id);
 
-    return res.status(200).json(persona);
+    return res.status(200).json({message: 'Direccion deleted succesfully', body: resultado});
 
   } catch (error) {
     console.error(error);

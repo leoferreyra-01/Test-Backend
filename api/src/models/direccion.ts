@@ -7,6 +7,7 @@ export interface Direccion {
 }
 
 export interface DireccionInfo {
+  id?: number;  
   calle?: string; 
   altura?: string;
   ciudad?: string;
