@@ -37,3 +37,27 @@ PORT=8000
 ```
 
 **IMPORTANTE: Recuerda actualizar estas variables con las que corresponda en tu PC. Principalmente la vairable DB_PASSWORD**
+
+## Testing
+Una vez realizados los pasos anteriores estamos en condiciones de poder realizar pruebas.
+
+Para iniciar la API de manera local, simplemente corremos el comando indicado, recuerda estar parado en la carpeta '/api'.
+
+```bash
+  $ cd /api
+  $ npm run dev
+```
+Con esto podemos realizar diferentes llamado a la API mediante la documentacion de Postan que se encuentra en la carpta '/api/docs'.
+
+Simplemente importamos esta configuracion y alli tendremos los diferentes endpoints con algunos datos de prueba.
+
+## Test Unitario
+Ahora bien, si desea correr los test unitarios, muy similar al caso anterior debe correr el comando indicado.
+
+```bash
+  $ cd /api
+  $ npm test
+  $ npm run test:watch
+```
+
+Como podemos ver, hay dos comandos diferentes para el testeo. Esto se debe a que, en el primer caso, podemos correr los test una sola vez o bien, en el segundo caso, podemos hacer que la dependencia que se encarga de correr los tests este revisando si hay algun cambio en los archivos y correr los tests nuevamente.
